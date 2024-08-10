@@ -187,7 +187,7 @@ new Vue({
           const list = this.formData.slice(0, i)
           const result = isWin(list, this, this.juNumber, true)
           console.log(result)
-          if (result.player0 !== result.player1) {
+          if (result.player0 !== result.player1 && result.isWinLoss) {
             console.log('到第', i, '局已分出胜负')
             funReset(i - 1)
           } else {
