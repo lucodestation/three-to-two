@@ -1,0 +1,38 @@
+body {
+  /* margin: 0; */
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, system-ui;
+  /* color: #333; */
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+table {
+  border-collapse: collapse;
+  border-color: #e5e5e5;
+}
+table tbody {
+  transition: background-color 200ms;
+}
+table tbody:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+table tbody:hover {
+  background-color: #f0f0f0;
+}
+table th,
+table td {
+  padding: 4px 30px;
+}
+
+.m-x-10px {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.m-y-10px {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+select:disabled {
+  cursor: not-allowed;
+}

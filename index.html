@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>三级表格推算二级表格</title>
+    <link rel="stylesheet" href="plugins/element-ui/element-ui-theme.css" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div>{{message}}</div>
+
+      <div class="m-y-10px" style="display: flex; align-items: center">
+        <div>设置总局数</div>
+        <input class="m-x-10px" style="width: 100px" type="number" v-model.number="juNumber" />
+        <button @click="handleInit">重新开始</button>
+      </div>
+
+      <hr />
+
+      <div v-if="formData.length">
+        <table border>
+          <thead>
+            <tr>
+              <th>局</th>
+              <th>选手</th>
+              <th>胜负</th>
+              <th>判罚</th>
+            </tr>
+          </thead>
+          <tbody v-for="(item, index) in formData" :key="index">
+            <tr>
+              <td rowspan="2">第{{item[0].sai}}局</td>
+              <td>{{item[0].player}}</td>
+              <td>
+                <select style="width: 100px" :disabled="item[0].disabled" v-model="item[0].win_loss" @change="handleWinLossChange(index, 0)">
+                  <option v-for="winLossItem in winLossList" :key="winLossItem.value" :label="winLossItem.label" :value="winLossItem.value"></option>
+                </select>
+              </td>
+              <td>
+                <select style="width: 100px" :disabled="item[0].disabled" clearable v-model="item[0].penalty" @change="handlePenaltyChange(index, 0)">
+                  <option value="">请选择</option>
+                  <option v-for="penaltyItem in penaltyList" :key="penaltyItem" :label="penaltyItem" :value="penaltyItem"></option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>{{item[1].player}}</td>
+              <td>
+                <select style="width: 100px" :disabled="item[1].disabled" v-model="item[1].win_loss" @change="handleWinLossChange(index, 1)">
+                  <option v-for="winLossItem in winLossList" :key="winLossItem.value" :label="winLossItem.label" :value="winLossItem.value"></option>
+                </select>
+              </td>
+              <td>
+                <select style="width: 100px" :disabled="item[1].disabled" clearable v-model="item[1].penalty" @change="handlePenaltyChange(index, 1)">
+                  <option value="">请选择</option>
+                  <option v-for="penaltyItem in penaltyList" :key="penaltyItem" :label="penaltyItem" :value="penaltyItem"></option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="m-y-10px">
+          <button @click="handleSubmit">推算</button>
+        </div>
+
+        <div v-if="winResult.canSubmit">
+          <div style="color: green" v-if="winResult.isWinLoss">已分出胜负</div>
+          <div style="color: red" v-else>未分出胜负</div>
+
+          <table border>
+            <thead>
+              <tr>
+                <th>选手</th>
+                <th>胜负</th>
+                <th>判罚</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>甲</td>
+                <td>
+                  <span v-if="winResult.player0 === 4">——</span>
+                  <span v-else-if="winResult.player0 > 0">胜</span>
+                  <span v-else-if="winResult.player0 < 0">负</span>
+                  <span v-else-if="winResult.player0 === 0">平</span>
+                </td>
+                <td>
+                  <span v-if="winResult.player0 === 4">退赛</span>
+                  <span v-else>——</span>
+                </td>
+              </tr>
+              <tr>
+                <td>乙</td>
+                <td>
+                  <span v-if="winResult.player1 === 4">——</span>
+                  <span v-else-if="winResult.player1 > 0">胜</span>
+                  <span v-else-if="winResult.player1 < 0">负</span>
+                  <span v-else-if="winResult.player1 === 0">平</span>
+                </td>
+                <td>
+                  <span v-if="winResult.player1 === 4">退赛</span>
+                  <span v-else>——</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/lodash.min.js"></script>
+    <script src="plugins/vue.js"></script>
+    <script src="plugins/element-ui/element-ui.min.js"></script>
+
+    <script src="utils.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
