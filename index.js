@@ -195,11 +195,79 @@ new Vue({
 
     // 推算
     handleSubmit() {
-      this.winResult = isWin(this.formData, this, this.juNumber)
-      console.log(_.cloneDeep(this.winResult))
-      if (this.winResult.canSubmit) {
+      const winResult = isWin(this.formData, this, this.juNumber)
+
+      if (winResult.canSubmit) {
         this.$message.success('可提交')
+
+        if (!winResult.isWinLoss) {
+          // 没有胜负结果时
+
+          if (winResult.player0.isQuit) {
+            winResult.player0.penaltyText = '退赛'
+            winResult.player0.winLossText = '——'
+          } else {
+            winResult.player0.penaltyText = '——'
+            winResult.player0.winLossText = '胜'
+          }
+
+          if (winResult.player1.isQuit) {
+            winResult.player1.penaltyText = '退赛'
+            winResult.player1.winLossText = '——'
+          } else {
+            winResult.player1.penaltyText = '——'
+            winResult.player1.winLossText = '胜'
+          }
+        } else {
+          // 有胜负结果时
+
+          if (winResult.player0.isQuit) {
+            winResult.player0.penaltyText = '退赛'
+            winResult.player0.winLossText = '——'
+          } else {
+            winResult.player0.penaltyText = '——'
+
+            if (winResult.player0.score === winResult.player1.score) {
+              if (winResult.player0.score > 0) {
+                winResult.player0.winLossText = '胜'
+              } else if (winResult.player0.score < 0) {
+                winResult.player0.winLossText = '负'
+              } else if (winResult.player0.score === 0) {
+                winResult.player0.winLossText = '平'
+              }
+            } else if (winResult.player0.score > winResult.player1.score) {
+              winResult.player0.winLossText = '胜'
+            } else if (winResult.player0.score < winResult.player1.score) {
+              winResult.player0.winLossText = '负'
+            }
+          }
+
+          if (winResult.player1.isQuit) {
+            winResult.player1.penaltyText = '退赛'
+            winResult.player1.winLossText = '——'
+          } else {
+            winResult.player1.penaltyText = '——'
+
+            if (winResult.player1.score === winResult.player0.score) {
+              if (winResult.player1.score > 0) {
+                winResult.player1.winLossText = '胜'
+              } else if (winResult.player1.score < 0) {
+                winResult.player1.winLossText = '负'
+              } else if (winResult.player1.score === 0) {
+                winResult.player1.winLossText = '平'
+              }
+            } else if (winResult.player1.score > winResult.player0.score) {
+              winResult.player1.winLossText = '胜'
+            } else if (winResult.player1.score < winResult.player0.score) {
+              winResult.player1.winLossText = '负'
+            }
+          }
+        }
       }
+
+      console.log(_.cloneDeep(winResult))
+
+      this.winResult = winResult
     },
   },
 })

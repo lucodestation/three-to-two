@@ -103,54 +103,14 @@
             <tbody>
               <tr>
                 <td>甲</td>
-                <td>
-                  <!-- 没有胜负结果时 -->
-                  <span v-if="!winResult.isWinLoss">
-                    <span v-if="winResult.player0.isQuit">——</span>
-                    <span v-else>胜</span>
-                  </span>
-                  <!-- 有胜负结果时 -->
-                  <span v-if="winResult.isWinLoss">
-                    <span v-if="winResult.player0.isQuit">——</span>
-                    <span v-else-if="winResult.player0.score === winResult.player1.score">
-                      <span v-if="winResult.player0.score > 0">胜</span>
-                      <span v-if="winResult.player0.score < 0">负</span>
-                      <span v-if="winResult.player0.score === 0">平</span>
-                    </span>
-                    <span v-else-if="winResult.player0.score > winResult.player1.score">胜</span>
-                    <span v-else-if="winResult.player0.score < winResult.player1.score">负</span>
-                  </span>
-                </td>
-                <td>
-                  <span v-if="winResult.player0.isQuit">退赛</span>
-                  <span v-else>——</span>
-                </td>
+                <td>{{winResult.player0.winLossText}}</td>
+                <td>{{winResult.player0.penaltyText}}</td>
                 <td>{{winResult.player0.score}}</td>
               </tr>
               <tr>
                 <td>乙</td>
-                <td>
-                  <!-- 没有胜负结果时 -->
-                  <span v-if="!winResult.isWinLoss">
-                    <span v-if="winResult.player1.isQuit">——</span>
-                    <span v-else>胜</span>
-                  </span>
-                  <!-- 有胜负结果时 -->
-                  <span v-if="winResult.isWinLoss">
-                    <span v-if="winResult.player1.isQuit">——</span>
-                    <span v-else-if="winResult.player1.score === winResult.player0.score">
-                      <span v-if="winResult.player1.score > 0">胜</span>
-                      <span v-if="winResult.player1.score < 0">负</span>
-                      <span v-if="winResult.player1.score === 0">平</span>
-                    </span>
-                    <span v-else-if="winResult.player1.score > winResult.player0.score">胜</span>
-                    <span v-else-if="winResult.player1.score < winResult.player0.score">负</span>
-                  </span>
-                </td>
-                <td>
-                  <span v-if="winResult.player1.isQuit">退赛</span>
-                  <span v-else>——</span>
-                </td>
+                <td>{{winResult.player1.winLossText}}</td>
+                <td>{{winResult.player1.penaltyText}}</td>
                 <td>{{winResult.player1.score}}</td>
               </tr>
             </tbody>
