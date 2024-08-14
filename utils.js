@@ -1,18 +1,18 @@
-// 个人赛三级表格成绩是否分出了胜负
-// 有没有区分出胜负是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则未分出胜负
+'use strict'
+
+// 个人赛三级表格成绩是否有胜负结果
+// 有没有胜负结果是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则没有胜负结果
 const isWin = (formData, that, totalJu, hideMessage) => {
   const result = {
-    canSubmit: false, // 是否可提交（分出胜负后或这个有退赛的并且退赛的那一局胜负录入完整）
-    isWinLoss: false, // canSubmit 是 true 时，是否分出了胜负
+    canSubmit: false, // 是否可提交（有胜负结果 或 有退赛的并且退赛的那一局胜负录入完整）
+    isWinLoss: false, // 是否有胜负结果
     player0: {
-      score: '', // 分，临时使用，区分出胜负时使用该值和对手的该值判断胜负
-      isQuit: false,
-      winLoss: '', // 2=胜, 1=负, 3=平, 4=不记录，胜负，未区分出胜负时使用该值判断胜负
+      score: '', // 分，临时使用，有胜负结果时使用该值和对手的该值判断胜负
+      isQuit: false, // 是否有退赛
     },
     player1: {
       score: '',
       isQuit: false,
-      winLoss: '',
     },
   }
 
@@ -36,50 +36,6 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     }
     return result
   }
-
-  // 胜负录入完整的局数
-  const completeJuCount = formData.reduce((count, item) => {
-    if (item[0].win_loss !== 0 && item[1].win_loss !== 0) {
-      count++
-    }
-    return count
-  }, 0)
-
-  // 如果录入的局数没有超过一半
-  if (completeJuCount <= totalJu / 2) {
-    console.log('录入的局数没有超过一半')
-
-    // 判断是否有退赛
-    const quitIndex = formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
-    if (quitIndex >= 0) {
-      console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
-
-      if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0.winLoss = 4
-        result.player0.isQuit = true
-      } else {
-        result.player0.winLoss = 2
-      }
-      if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1.winLoss = 4
-        result.player1.isQuit = true
-      } else {
-        result.player1.winLoss = 2
-      }
-
-      result.canSubmit = true
-      return result
-    }
-
-    const juArrangeInfo = formData.find((item) => item[0].win_loss === 0 || item[1].win_loss === 0)
-    if (!hideMessage) {
-      that.$message({ message: `第${juArrangeInfo[0].sai}局：请录入胜负`, type: 'error' })
-    }
-    return result
-  }
-
-  // 胜负未录入的局数
-  const emptyJuCount = totalJu - completeJuCount
 
   // 胜+1分，负-1分，平0分
 
@@ -126,9 +82,43 @@ const isWin = (formData, that, totalJu, hideMessage) => {
 
   console.log('----------', +new Date(), '----------')
 
+  // 胜负录入完整的局数
+  const completeJuCount = formData.reduce((count, item) => {
+    if (item[0].win_loss !== 0 && item[1].win_loss !== 0) {
+      count++
+    }
+    return count
+  }, 0)
+
+  // 如果录入的局数没有超过一半
+  if (completeJuCount <= totalJu / 2) {
+    console.log('录入的局数没有超过一半')
+
+    // 判断是否有退赛
+    const quitIndex = formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
+    if (quitIndex >= 0) {
+      console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
+
+      result.player0.isQuit = formData[quitIndex][0].penalty === '退赛'
+      result.player1.isQuit = formData[quitIndex][1].penalty === '退赛'
+
+      result.canSubmit = true
+      return result
+    }
+
+    const juArrangeInfo = formData.find((item) => item[0].win_loss === 0 || item[1].win_loss === 0)
+    if (!hideMessage) {
+      that.$message({ message: `第${juArrangeInfo[0].sai}局：请录入胜负`, type: 'error' })
+    }
+    return result
+  }
+
+  // 胜负未录入的局数
+  const emptyJuCount = totalJu - completeJuCount
+
   // 所有局都已录完
   if (emptyJuCount === 0) {
-    console.log('所有局都已录完，已分出胜负')
+    console.log('所有局都已录完，已有胜负结果')
 
     result.canSubmit = true
     result.isWinLoss = true
@@ -138,14 +128,8 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     if (quitIndex >= 0) {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
-      if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0.winLoss = 4
-        result.player0.isQuit = true
-      }
-      if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1.winLoss = 4
-        result.player1.isQuit = true
-      }
+      result.player0.isQuit = formData[quitIndex][0].penalty === '退赛'
+      result.player1.isQuit = formData[quitIndex][1].penalty === '退赛'
 
       result.canSubmit = true
       return result
@@ -162,25 +146,15 @@ const isWin = (formData, that, totalJu, hideMessage) => {
 
   // 如果 两个选手的分数差的一半 小于等于 未录入的局数
   if (scoreDiff <= 2 || scoreDiff / 2 <= emptyJuCount) {
-    console.log('未录完，未分出胜负，需继续录入')
+    console.log('未录完，没有胜负结果，需继续录入')
 
     // 判断是否有退赛
     const quitIndex = formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
     if (quitIndex >= 0) {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
-      if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0.winLoss = 4
-        result.player0.isQuit = true
-      } else {
-        result.player0.winLoss = 2
-      }
-      if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1.winLoss = 4
-        result.player1.isQuit = true
-      } else {
-        result.player1.winLoss = 2
-      }
+      result.player0.isQuit = formData[quitIndex][0].penalty === '退赛'
+      result.player1.isQuit = formData[quitIndex][1].penalty === '退赛'
 
       result.canSubmit = true
       return result
@@ -192,7 +166,7 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     }
     return result
   } else {
-    console.log('未录完，已分出胜负')
+    console.log('未录完，有胜负结果')
     result.canSubmit = true
     result.isWinLoss = true
 
@@ -201,14 +175,8 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     if (quitIndex >= 0) {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
-      if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0.winLoss = 4
-        result.player0.isQuit = true
-      }
-      if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1.winLoss = 4
-        result.player1.isQuit = true
-      }
+      result.player0.isQuit = formData[quitIndex][0].penalty === '退赛'
+      result.player1.isQuit = formData[quitIndex][1].penalty === '退赛'
 
       result.canSubmit = true
       return result

@@ -22,10 +22,6 @@ new Vue({
       // [ { sai, player, win_loss, penalty, disabled } ]
       formData: [],
 
-      // canSubmit: false, // 是否可提交（分出胜负后或这个有退赛的并且退赛的那一局胜负录入完整）
-      // isWinLoss: false, // canSubmit 是 true 时，是否分出了胜负
-      // player0: 0, // 0=未区分, 2=胜, 1=负, 3=平, 4=不记录
-      // player1: 0, // 0=未区分, 2=胜, 1=负, 3=平, 4=不记录
       winResult: {},
     }
   },
@@ -180,18 +176,18 @@ new Vue({
         const ju = this.juNumber % 2 ? Math.ceil(this.juNumber / 2) : this.juNumber / 2 + 1
         console.log('至少要录', ju, '局')
 
-        // 局数依次递增，如果已分出胜负，则清除后面录入的信息并禁止录入后边的局
+        // 局数依次递增，如果有胜负结果，则清除后面录入的信息并禁止录入后边的局
         for (let i = ju; i <= completeJuCount; i++) {
           console.log('第', i, '局')
           // 获取前 i 局
           const list = this.formData.slice(0, i)
           const result = isWin(list, this, this.juNumber, true)
           console.log(result)
-          if (result.player0.winLoss !== result.player1.winLoss && result.isWinLoss) {
-            console.log('到第', i, '局已分出胜负')
+          if (result.isWinLoss) {
+            console.log('到第', i, '局已有胜负结果')
             funReset(i - 1)
           } else {
-            console.warn('到第', i, '局未分出胜负')
+            console.warn('到第', i, '局没有胜负结果')
           }
         }
       }

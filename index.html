@@ -85,10 +85,10 @@
         </div>
 
         <div v-if="winResult.canSubmit">
-          <div style="font-weight: bold; color: green" v-if="winResult.isWinLoss">已分出胜负</div>
-          <div style="font-weight: bold; color: red" v-else>未分出胜负</div>
+          <div style="font-weight: bold; color: green" v-if="winResult.isWinLoss">有胜负结果</div>
+          <div style="font-weight: bold; color: red" v-else>没有胜负结果</div>
           <div style="color: #999">
-            有没有区分出胜负是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则未分出胜负
+            有没有胜负结果是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则没有胜负结果
           </div>
 
           <table border>
@@ -104,14 +104,12 @@
               <tr>
                 <td>甲</td>
                 <td>
-                  <!-- 未区分出胜负时 -->
+                  <!-- 没有胜负结果时 -->
                   <span v-if="!winResult.isWinLoss">
-                    <span v-if="winResult.player0.winLoss === 4">——</span>
-                    <span v-else-if="winResult.player0.winLoss === 2">胜</span>
-                    <span v-else-if="winResult.player0.winLoss === 1">负</span>
-                    <span v-else-if="winResult.player0.winLoss === 3">平</span>
+                    <span v-if="winResult.player0.isQuit">——</span>
+                    <span v-else>胜</span>
                   </span>
-                  <!-- 区分出胜负时 -->
+                  <!-- 有胜负结果时 -->
                   <span v-if="winResult.isWinLoss">
                     <span v-if="winResult.player0.isQuit">——</span>
                     <span v-else-if="winResult.player0.score === winResult.player1.score">
@@ -132,14 +130,12 @@
               <tr>
                 <td>乙</td>
                 <td>
-                  <!-- 未区分出胜负时 -->
+                  <!-- 没有胜负结果时 -->
                   <span v-if="!winResult.isWinLoss">
                     <span v-if="winResult.player1.isQuit">——</span>
-                    <span v-else-if="winResult.player1.winLoss === 2">胜</span>
-                    <span v-else-if="winResult.player1.winLoss === 1">负</span>
-                    <span v-else-if="winResult.player1.winLoss === 3">平</span>
+                    <span v-else>胜</span>
                   </span>
-                  <!-- 区分出胜负时 -->
+                  <!-- 有胜负结果时 -->
                   <span v-if="winResult.isWinLoss">
                     <span v-if="winResult.player1.isQuit">——</span>
                     <span v-else-if="winResult.player1.score === winResult.player0.score">
