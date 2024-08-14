@@ -136,10 +136,10 @@ new Vue({
     // 选择胜负或判罚后的处理
     _process() {
       // 如果有退赛的局
-      const disabledJuIndex = this.formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
+      const quitJuIndex = this.formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
 
+      // 指定局之后的所有局信息重置且禁用
       const funReset = (startJuIndex) => {
-        // 退赛的局之后的所有局信息重置且禁用
         if (startJuIndex >= 0) {
           this.formData.forEach((item, index) => {
             if (index > startJuIndex) {
@@ -159,7 +159,7 @@ new Vue({
           })
         }
       }
-      funReset(disabledJuIndex)
+      funReset(quitJuIndex)
 
       // ----------
 
@@ -187,7 +187,7 @@ new Vue({
           const list = this.formData.slice(0, i)
           const result = isWin(list, this, this.juNumber, true)
           console.log(result)
-          if (result.player0 !== result.player1 && result.isWinLoss) {
+          if (result.player0.winLoss !== result.player1.winLoss && result.isWinLoss) {
             console.log('到第', i, '局已分出胜负')
             funReset(i - 1)
           } else {
@@ -199,7 +199,7 @@ new Vue({
 
     // 推算
     handleSubmit() {
-      this.winResult = isWin(this.formData, this.juNumber, this)
+      this.winResult = isWin(this.formData, this, this.juNumber)
       console.log(_.cloneDeep(this.winResult))
       if (this.winResult.canSubmit) {
         this.$message.success('可提交')

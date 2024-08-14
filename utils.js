@@ -1,10 +1,19 @@
 // 个人赛三级表格成绩是否分出了胜负
+// 有没有区分出胜负是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则未分出胜负
 const isWin = (formData, that, totalJu, hideMessage) => {
   const result = {
     canSubmit: false, // 是否可提交（分出胜负后或这个有退赛的并且退赛的那一局胜负录入完整）
     isWinLoss: false, // canSubmit 是 true 时，是否分出了胜负
-    player0: 0, // 0=未区分, 2=胜, 1=负, 3=平, 4=不记录
-    player1: 0, // 0=未区分, 2=胜, 1=负, 3=平, 4=不记录
+    player0: {
+      score: '', // 分，临时使用，区分出胜负时使用该值和对手的该值判断胜负
+      isQuit: false,
+      winLoss: '', // 2=胜, 1=负, 3=平, 4=不记录，胜负，未区分出胜负时使用该值判断胜负
+    },
+    player1: {
+      score: '',
+      isQuit: false,
+      winLoss: '',
+    },
   }
 
   // 如果第1局没有录入
@@ -46,14 +55,16 @@ const isWin = (formData, that, totalJu, hideMessage) => {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
       if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0 = 4
+        result.player0.winLoss = 4
+        result.player0.isQuit = true
       } else {
-        result.player0 = 2
+        result.player0.winLoss = 2
       }
       if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1 = 4
+        result.player1.winLoss = 4
+        result.player1.isQuit = true
       } else {
-        result.player1 = 2
+        result.player1.winLoss = 2
       }
 
       result.canSubmit = true
@@ -73,11 +84,11 @@ const isWin = (formData, that, totalJu, hideMessage) => {
   // 胜+1分，负-1分，平0分
 
   // 这个分只是临时判断胜负用
-  result.player0 = formData.reduce((score, item) => {
+  result.player0.score = formData.reduce((score, item) => {
     const playerIndex = 0
 
     // 先判断判罚，有判罚以判罚为准，判罚不存在再判断胜负
-    if (item[playerIndex].penalty) {
+    if (['弃权', '判负', '判胜'].includes(item[playerIndex].penalty)) {
       if (item[playerIndex].penalty === '弃权' || item[playerIndex].penalty === '判负') {
         score--
       } else if (item[playerIndex].penalty === '判胜') {
@@ -93,10 +104,10 @@ const isWin = (formData, that, totalJu, hideMessage) => {
 
     return score
   }, 0)
-  result.player1 = formData.reduce((score, item) => {
+  result.player1.score = formData.reduce((score, item) => {
     const playerIndex = 1
     // 先判断判罚，有判罚以判罚为准，判罚不存在再判断胜负
-    if (item[playerIndex].penalty) {
+    if (['弃权', '判负', '判胜'].includes(item[playerIndex].penalty)) {
       if (item[playerIndex].penalty === '弃权' || item[playerIndex].penalty === '判负') {
         score--
       } else if (item[playerIndex].penalty === '判胜') {
@@ -128,10 +139,12 @@ const isWin = (formData, that, totalJu, hideMessage) => {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
       if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0 = 4
+        result.player0.winLoss = 4
+        result.player0.isQuit = true
       }
       if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1 = 4
+        result.player1.winLoss = 4
+        result.player1.isQuit = true
       }
 
       result.canSubmit = true
@@ -144,7 +157,7 @@ const isWin = (formData, that, totalJu, hideMessage) => {
   // 向下走，肯定是在胜负没有录完的情况下
 
   // 两个选手的分数差
-  const scoreDiff = Math.abs(result.player0 - result.player1)
+  const scoreDiff = Math.abs(result.player0.score - result.player1.score)
   // console.log({ scoreDiff, emptyJuCount })
 
   // 如果 两个选手的分数差的一半 小于等于 未录入的局数
@@ -157,14 +170,16 @@ const isWin = (formData, that, totalJu, hideMessage) => {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
       if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0 = 4
+        result.player0.winLoss = 4
+        result.player0.isQuit = true
       } else {
-        result.player0 = 2
+        result.player0.winLoss = 2
       }
       if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1 = 4
+        result.player1.winLoss = 4
+        result.player1.isQuit = true
       } else {
-        result.player1 = 2
+        result.player1.winLoss = 2
       }
 
       result.canSubmit = true
@@ -187,10 +202,12 @@ const isWin = (formData, that, totalJu, hideMessage) => {
       console.log(`第${formData[quitIndex][0].sai}局：有退赛`)
 
       if (formData[quitIndex][0].penalty === '退赛') {
-        result.player0 = 4
+        result.player0.winLoss = 4
+        result.player0.isQuit = true
       }
       if (formData[quitIndex][1].penalty === '退赛') {
-        result.player1 = 4
+        result.player1.winLoss = 4
+        result.player1.isQuit = true
       }
 
       result.canSubmit = true
