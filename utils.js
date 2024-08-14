@@ -1,6 +1,6 @@
 'use strict'
 
-// 个人赛三级表格成绩是否有胜负结果
+// 个人赛三级表格成绩是否有胜负结果（胜、负、平）
 // 有没有胜负结果是根据去除退赛的判罚后，拿已录的胜负、判罚和总局数来计算的，如果未录的局能把已录成绩的胜负结果否定掉，则没有胜负结果
 const isWin = (formData, that, totalJu, hideMessage) => {
   const result = {
