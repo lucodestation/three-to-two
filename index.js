@@ -243,18 +243,18 @@ new Vue({
 
             if (winResult.player0.score === winResult.player1.score) {
               winResult.player0.winLossText = '平'
+              if (winResult.player0.allWin && winResult.player1.allWin) {
+                winResult.player0.winLossText = '胜'
+                winResult.player1.winLossText = '胜'
+              }
+              if (winResult.player0.allLoss && winResult.player1.allLoss) {
+                winResult.player0.winLossText = '负'
+                winResult.player1.winLossText = '负'
+              }
             } else if (winResult.player0.score > winResult.player1.score) {
               winResult.player0.winLossText = '胜'
             } else if (winResult.player0.score < winResult.player1.score) {
               winResult.player0.winLossText = '负'
-            }
-            if (winResult.player0.allWin && winResult.player1.allWin) {
-              winResult.player0.winLossText = '胜'
-              winResult.player1.winLossText = '胜'
-            }
-            if (winResult.player0.allLoss && winResult.player1.allLoss) {
-              winResult.player0.winLossText = '负'
-              winResult.player1.winLossText = '负'
             }
           }
 
@@ -280,18 +280,17 @@ new Vue({
 
             if (winResult.player1.score === winResult.player0.score) {
               winResult.player1.winLossText = '平'
+              if (winResult.player0.allWin && winResult.player1.allWin) {
+                winResult.player0.winLossText = '胜'
+                winResult.player1.winLossText = '胜'
+              }
+              if (winResult.player0.allLoss && winResult.player1.allLoss) {
+                winResult.player0.winLossText = '负'
+                winResult.player1.winLossText = '负'
+              }
             } else if (winResult.player1.score > winResult.player0.score) {
               winResult.player1.winLossText = '胜'
             } else if (winResult.player1.score < winResult.player0.score) {
-              winResult.player1.winLossText = '负'
-            }
-
-            if (winResult.player0.allWin && winResult.player1.allWin) {
-              winResult.player0.winLossText = '胜'
-              winResult.player1.winLossText = '胜'
-            }
-            if (winResult.player0.allLoss && winResult.player1.allLoss) {
-              winResult.player0.winLossText = '负'
               winResult.player1.winLossText = '负'
             }
           }
