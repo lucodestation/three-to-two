@@ -1,4 +1,4 @@
-'use script'
+'use strict'
 
 new Vue({
   name: 'App',
