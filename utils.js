@@ -9,10 +9,14 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     player0: {
       score: '', // 分，临时使用，有胜负结果时使用该值和对手的该值判断胜负
       isQuit: false, // 是否有退赛
+      allWin: false, // 有胜负结果时，是否全部胜
+      allLoss: false, // 有胜负结果时，是否全部负
     },
     player1: {
       score: '',
       isQuit: false,
+      allWin: false,
+      allLoss: false,
     },
   }
 
@@ -123,6 +127,43 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     result.canSubmit = true
     result.isWinLoss = true
 
+    result.player0.allWin = formData.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[0].penalty)) {
+        if (item[0].penalty === '判胜') {
+          return true
+        }
+      } else {
+        return item[0].win_loss === 2
+      }
+    })
+    result.player0.allLoss = formData.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[0].penalty)) {
+        if (item[0].penalty === '弃权' || item[0].penalty === '判负') {
+          return true
+        }
+      } else {
+        return item[0].win_loss === 1
+      }
+    })
+    result.player1.allWin = formData.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[1].penalty)) {
+        if (item[1].penalty === '判胜') {
+          return true
+        }
+      } else {
+        return item[1].win_loss === 2
+      }
+    })
+    result.player1.allLoss = formData.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[1].penalty)) {
+        if (item[1].penalty === '弃权' || item[1].penalty === '判负') {
+          return true
+        }
+      } else {
+        return item[1].win_loss === 1
+      }
+    })
+
     // 判断是否有退赛
     const quitIndex = formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
     if (quitIndex >= 0) {
@@ -169,6 +210,46 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     console.log('未录完，有胜负结果')
     result.canSubmit = true
     result.isWinLoss = true
+
+    // 已录成绩的局
+    const list = formData.filter((item) => item[0].win_loss !== 0)
+
+    result.player0.allWin = list.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[0].penalty)) {
+        if (item[0].penalty === '判胜') {
+          return true
+        }
+      } else {
+        return item[0].win_loss === 2
+      }
+    })
+    result.player0.allLoss = list.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[0].penalty)) {
+        if (item[0].penalty === '弃权' || item[0].penalty === '判负') {
+          return true
+        }
+      } else {
+        return item[0].win_loss === 1
+      }
+    })
+    result.player1.allWin = list.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[1].penalty)) {
+        if (item[1].penalty === '判胜') {
+          return true
+        }
+      } else {
+        return item[1].win_loss === 2
+      }
+    })
+    result.player1.allLoss = list.every((item) => {
+      if (['弃权', '判负', '判胜'].includes(item[1].penalty)) {
+        if (item[1].penalty === '弃权' || item[1].penalty === '判负') {
+          return true
+        }
+      } else {
+        return item[1].win_loss === 1
+      }
+    })
 
     // 判断是否有退赛
     const quitIndex = formData.findIndex((item) => item[0].penalty === '退赛' || item[1].penalty === '退赛')
