@@ -6,6 +6,10 @@ body {
   line-height: 1.5;
 }
 
+select {
+  border-color: #eee;
+}
+
 table {
   border-collapse: collapse;
   border-color: #e5e5e5;
