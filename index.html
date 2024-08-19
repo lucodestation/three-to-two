@@ -8,6 +8,18 @@
     <link rel="icon" href="logo.png" />
     <link rel="stylesheet" href="plugins/element-ui/element-ui-theme.css" />
     <link rel="stylesheet" href="index.css" />
+    <script>
+      function isLocal() {
+        return location.host.startsWith('192') || location.host.startsWith('127') || location.host.startsWith('localhost')
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOMContentLoaded')
+        if (isLocal()) {
+          document.querySelector('link[rel="icon"').href = 'logo.local.png'
+        }
+      })
+    </script>
   </head>
   <body>
     <div id="app">

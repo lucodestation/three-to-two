@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="icon" href="logo.png" />
+    <script>
+      function isLocal() {
+        return location.host.startsWith('192') || location.host.startsWith('127') || location.host.startsWith('localhost')
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOMContentLoaded')
+        if (isLocal()) {
+          document.querySelector('link[rel="icon"').href = 'logo.local.png'
+        }
+      })
+    </script>
   </head>
   <body></body>
 </html>
