@@ -61,31 +61,42 @@ new Vue({
 
       const value = this.formData[index][position].win_loss
 
+      // 更改对手的胜负，如果对手的判罚为空或警告时才可以改对手的胜负，如果对手的判罚是弃权、退赛、判胜、判负时，对手的胜负不能改
       if (position === 0) {
-        if (value === 1) {
-          // 上边的选择负，下边的改成胜
-          this.formData[index][1].win_loss = 2
-        } else if (value === 2) {
-          // 上边的选择胜，下边的改成负
-          this.formData[index][1].win_loss = 1
-        } else {
-          this.formData[index][1].win_loss = value
-        }
-      } else if (position === 1) {
-        if (value === 1) {
-          // 下边的选择负，上边的改成胜
-          this.formData[index][0].win_loss = 2
-        } else if (value === 2) {
-          // 下边的选择胜，上边的改成负
-          this.formData[index][0].win_loss = 1
-        } else {
-          this.formData[index][0].win_loss = value
-        }
-      }
+        // 上边的选手
 
-      // 重置判罚
-      this.formData[index][0].penalty = ''
-      this.formData[index][1].penalty = ''
+        if (['', '警告'].includes(this.formData[index][1].penalty)) {
+          if (value === 1) {
+            // 上边的选择负，下边的改成胜
+            this.formData[index][1].win_loss = 2
+          } else if (value === 2) {
+            // 上边的选择胜，下边的改成负
+            this.formData[index][1].win_loss = 1
+          } else {
+            this.formData[index][1].win_loss = value
+          }
+        }
+
+        // 重置自己的判罚
+        this.formData[index][0].penalty = ''
+      } else if (position === 1) {
+        // 下边的选手
+
+        if (['', '警告'].includes(this.formData[index][0].penalty)) {
+          if (value === 1) {
+            // 下边的选择负，上边的改成胜
+            this.formData[index][0].win_loss = 2
+          } else if (value === 2) {
+            // 下边的选择胜，上边的改成负
+            this.formData[index][0].win_loss = 1
+          } else {
+            this.formData[index][0].win_loss = value
+          }
+        }
+
+        // 重置自己的判罚
+        this.formData[index][1].penalty = ''
+      }
 
       if (value === 0) {
         // 选择空时当前局及后所有局重置
