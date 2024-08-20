@@ -23,7 +23,7 @@
   </head>
   <body>
     <div id="app">
-      <div>{{message}}</div>
+      <div @dblclick="showScore = !showScore">{{message}}</div>
 
       <hr />
 
@@ -41,7 +41,7 @@
               <th>选手</th>
               <th>胜负</th>
               <th>判罚</th>
-              <th>分（临时）</th>
+              <th v-if="showScore">分（临时）</th>
             </tr>
           </thead>
           <tbody v-for="(item, index) in formData" :key="index">
@@ -59,7 +59,7 @@
                   <option v-for="penaltyItem in penaltyList" :key="penaltyItem" :label="penaltyItem" :value="penaltyItem"></option>
                 </select>
               </td>
-              <td>
+              <td v-if="showScore">
                 <span v-if="item[0].penalty === '弃权' || item[0].penalty === '判负'">-1</span>
                 <span v-else-if="item[0].penalty === '判胜'">1</span>
                 <span v-else-if="item[0].win_loss === 2">1</span>
@@ -80,7 +80,7 @@
                   <option v-for="penaltyItem in penaltyList" :key="penaltyItem" :label="penaltyItem" :value="penaltyItem"></option>
                 </select>
               </td>
-              <td>
+              <td v-if="showScore">
                 <span v-if="item[1].penalty === '弃权' || item[1].penalty === '判负'">-1</span>
                 <span v-else-if="item[1].penalty === '判胜'">1</span>
                 <span v-else-if="item[1].win_loss === 2">1</span>
@@ -110,7 +110,7 @@
                 <th>选手</th>
                 <th>胜负</th>
                 <th>判罚</th>
-                <th>分（临时）</th>
+                <th v-if="showScore">分（临时）</th>
               </tr>
             </thead>
             <tbody>
@@ -118,13 +118,13 @@
                 <td>{{formData[0][0].player}}</td>
                 <td>{{winResult.player0.winLossText}}</td>
                 <td>{{winResult.player0.penaltyText}}</td>
-                <td>{{winResult.player0.score}}</td>
+                <td v-if="showScore">{{winResult.player0.score}}</td>
               </tr>
               <tr>
                 <td>{{formData[0][1].player}}</td>
                 <td>{{winResult.player1.winLossText}}</td>
                 <td>{{winResult.player1.penaltyText}}</td>
-                <td>{{winResult.player1.score}}</td>
+                <td v-if="showScore">{{winResult.player1.score}}</td>
               </tr>
             </tbody>
           </table>

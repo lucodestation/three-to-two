@@ -7,6 +7,8 @@ new Vue({
     return {
       message: '三级表格推算二级表格 Demo',
 
+      showScore: false,
+
       // 局数
       juNumber: '',
       // 胜负
@@ -28,6 +30,10 @@ new Vue({
   mounted() {
     this.juNumber = 3
     this.handleInit()
+
+    if (isLocal()) {
+      this.showScore = true
+    }
   },
   methods: {
     handleInit() {
