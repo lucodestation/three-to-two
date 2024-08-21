@@ -266,3 +266,19 @@ const isWin = (formData, that, totalJu, hideMessage) => {
     return result
   }
 }
+
+// 普通注释
+// ! 注意、警告、错误
+// ? 疑问
+// todo 待办
+// * 突出
+// // 废弃、删除
+
+/**
+ * 普通注释
+ * ! 注意、警告、错误
+ * ? 疑问
+ * todo 待办
+ * *突出
+ * // 废弃、删除
+ */

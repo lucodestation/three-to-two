@@ -144,6 +144,28 @@ new Vue({
         }
       }
 
+      if (position === 0) {
+        if (this.formData[index][1].win_loss !== 0 && ['', '警告'].includes(this.formData[index][1].penalty)) {
+          if (this.formData[index][1].win_loss === 1) {
+            this.formData[index][0].win_loss = 2
+          } else if (this.formData[index][1].win_loss === 2) {
+            this.formData[index][0].win_loss = 1
+          } else if (this.formData[index][1].win_loss === 3) {
+            this.formData[index][0].win_loss = 3
+          }
+        }
+      } else if (position === 1) {
+        if (this.formData[index][0].win_loss !== 0 && ['', '警告'].includes(this.formData[index][0].penalty)) {
+          if (this.formData[index][0].win_loss === 1) {
+            this.formData[index][1].win_loss = 2
+          } else if (this.formData[index][0].win_loss === 2) {
+            this.formData[index][1].win_loss = 1
+          } else if (this.formData[index][0].win_loss === 3) {
+            this.formData[index][1].win_loss = 3
+          }
+        }
+      }
+
       this._process()
     },
     // 选择胜负或判罚后的处理
