@@ -244,7 +244,8 @@ new Vue({
 
           if (winResult.player0.isQuit) {
             winResult.player0.penaltyText = '退赛'
-            winResult.player0.winLossText = '——'
+            // winResult.player0.winLossText = '——'
+            winResult.player0.winLossText = '负'
           } else {
             winResult.player0.penaltyText = '——'
             winResult.player0.winLossText = '胜'
@@ -252,7 +253,8 @@ new Vue({
 
           if (winResult.player1.isQuit) {
             winResult.player1.penaltyText = '退赛'
-            winResult.player1.winLossText = '——'
+            // winResult.player1.winLossText = '——'
+            winResult.player1.winLossText = '负'
           } else {
             winResult.player1.penaltyText = '——'
             winResult.player1.winLossText = '胜'
@@ -262,7 +264,8 @@ new Vue({
 
           if (winResult.player0.isQuit) {
             winResult.player0.penaltyText = '退赛'
-            winResult.player0.winLossText = '——'
+            // winResult.player0.winLossText = '——'
+            winResult.player0.winLossText = '负'
           } else {
             winResult.player0.penaltyText = '——'
 
@@ -299,7 +302,8 @@ new Vue({
 
           if (winResult.player1.isQuit) {
             winResult.player1.penaltyText = '退赛'
-            winResult.player1.winLossText = '——'
+            // winResult.player1.winLossText = '——'
+            winResult.player1.winLossText = '负'
           } else {
             winResult.player1.penaltyText = '——'
 
