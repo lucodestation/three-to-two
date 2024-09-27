@@ -19,5 +19,14 @@
       })
     </script>
   </head>
-  <body></body>
+  <body>
+    <script src="qs.js"></script>
+    <script>
+      'use strict'
+      const queryObj = Qs.parse(location.search.slice(1))
+      if (queryObj.bg) {
+        document.body.style.backgroundColor = queryObj.bg
+      }
+    </script>
+  </body>
 </html>
